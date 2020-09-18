@@ -74,7 +74,7 @@ resource "aws_codebuild_project" "dockerbuild" {
 
   source {
     type = "CODEPIPELINE"
-    buildspec = "pipeline_delivery/docker_build_buildspec.yml"
+    buildspec = "cicd/pipeline_delivery/docker_build_buildspec.yml"
   }
 
   source_version = "master"
