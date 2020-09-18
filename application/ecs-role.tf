@@ -19,10 +19,6 @@ resource "aws_iam_role_policy_attachment" "codepipeline-attach" {
   role = aws_iam_role.ecs-role.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
-resource "aws_iam_role_policy_attachment" "codepipeline1" {
-  role = aws_iam_role.ecs-role.id
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name = "ecr"
   role = aws_iam_role.ecs-role.id

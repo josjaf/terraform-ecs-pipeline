@@ -100,7 +100,7 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = "${var.fargate_cpu}"
   memory                   = "${var.fargate_memory}"
   execution_role_arn = aws_iam_role.ecs-role.arn # this is the role for ecs to pull images
-  task_role_arn = aws_iam_role.ecs-role.arn
+  #task_role_arn = aws_iam_role.ecs-role.arn
   container_definitions = <<DEFINITION
 [
   {
@@ -142,4 +142,8 @@ resource "aws_ecs_service" "main" {
   depends_on = [
     "aws_alb_listener.front_end",
   ]
+}
+
+output "lb" {
+  value = aws_alb.main.dns_name
 }
