@@ -1,0 +1,6 @@
+bucket = "josjaffe"
+region = "us-east-1"
+bucket_region = "us-east-1"
+key = "terraform/terraform-ecs-cicd.tf"
+env = "dev"
+namespace = "terraform-ecs"
