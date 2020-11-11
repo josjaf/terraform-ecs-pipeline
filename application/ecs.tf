@@ -93,6 +93,8 @@ resource "aws_ecs_cluster" "main" {
   name = var.ecs_cluster_name
 }
 
+# name here has to match what codepipeline and codebuild is publishing in the imagedefinitions.json
+# you cannot update name
 resource "aws_ecs_task_definition" "app" {
   family                   = "2048"
   network_mode             = "awsvpc"
@@ -107,7 +109,7 @@ resource "aws_ecs_task_definition" "app" {
     "cpu": ${var.fargate_cpu},
     "image": "${aws_ecr_repository.ecr.repository_url}:2048",
     "memory": ${var.fargate_memory},
-    "name": "app",
+    "name": "${var.ecs_service_name}"
     "networkMode": "awsvpc",
     "portMappings": [
       {
@@ -135,7 +137,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.app.id}"
-    container_name   = "app"
+    container_name   = "${var.ecs_service_name}"
     container_port   = "${var.app_port}"
   }
 
