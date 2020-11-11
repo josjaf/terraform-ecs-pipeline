@@ -109,7 +109,7 @@ resource "aws_ecs_task_definition" "app" {
     "cpu": ${var.fargate_cpu},
     "image": "${aws_ecr_repository.ecr.repository_url}:2048",
     "memory": ${var.fargate_memory},
-    "name": "${var.ecs_service_name}"
+    "name": "${var.ecs_service_name}",
     "networkMode": "awsvpc",
     "portMappings": [
       {
