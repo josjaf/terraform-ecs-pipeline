@@ -1,15 +1,32 @@
 version: 0.2
 
+env:
+  parameter-store:
+    REPOSITORY_URI: /${namespace}/ecr/uri
+
 phases:
   pre_build:
     commands:
       - echo logging into docker
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=backend}
   build:
     commands:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
-      - docker build -t ${tag}:latest application/
-      - docker tag $tag:latest $ecr:$tag
-      - docker push $ecr
+      - docker build -t -t $REPOSITORY_URI:2048 application/
+      - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      # push two tags
+      - docker push $REPOSITORY_URI:2048
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      # this definitions file is used for the deployment, it takes the old task definition and just over writes the image
+      - printf '[{"name":"%s","imageUri":"%s"}]' $SERVICE_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json
 
+#artifacts:
+#  files: imagedefinitions.json

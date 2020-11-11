@@ -36,4 +36,5 @@ module "codepipeline-docker" {
   source    = "./main"
   env       = var.env
   namespace = var.namespace
+  region = var.region
 }

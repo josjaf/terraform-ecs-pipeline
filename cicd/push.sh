@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export account_id=$(aws sts get-caller-identity | jq -r .Account)
-export source_bucket=$(aws ssm get-parameter --name 'tf-docker-push-bucket' | jq -r .Parameter.Value)
-export pipeline_name=$(aws ssm get-parameter --name 'tf-docker-push-pipeline' | jq -r .Parameter.Value)
+export source_bucket=$(aws ssm get-parameter --name '/tf-docker-push/bucket' | jq -r .Parameter.Value)
+export pipeline_name=$(aws ssm get-parameter --name '/tf-docker-push/pipeline' | jq -r .Parameter.Value)
 export REGION='us-east-1'
 
 rm -rf source.zip

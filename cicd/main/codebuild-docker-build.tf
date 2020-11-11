@@ -64,7 +64,10 @@ resource "aws_codebuild_project" "dockerbuild" {
       name = "ecr"
       value = aws_ecr_repository.ecr.repository_url
     }
-
+    environment_variable {
+      name = "namespace"
+      value = var.namespace
+    }
     environment_variable {
       name = "tag"
       value = var.namespace
