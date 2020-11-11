@@ -25,6 +25,7 @@ phases:
       # push two tags
       - docker push $REPOSITORY_URI:2048
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo pushed $REPOSITORY_URI:2048
       # this definitions file is used for the deployment, it takes the old task definition and just over writes the image
       - printf '[{"name":"%s","imageUri":"%s"}]' $SERVICE_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json
