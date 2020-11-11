@@ -51,7 +51,8 @@ data "aws_iam_policy_document" "default" {
       type = "AWS"
       identifiers = [
         aws_iam_role.codebuild-role.arn,
-      aws_iam_role.codepipeline-role.arn]
+      aws_iam_role.codepipeline-role.arn,
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions = [
       "kms:DescribeKey",

@@ -146,7 +146,7 @@ resource "aws_ecs_service" "main" {
 resource "aws_ssm_parameter" "serviceparameter" {
   name = "/${var.namespace}/ecs/service"
   type = "String"
-  value = aws_ecs_service.main.id
+  value = aws_ecs_service.main.name
   tags = {
     Name = var.namespace
     environment = var.namespace
