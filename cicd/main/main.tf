@@ -1,14 +1,3 @@
-resource "aws_ecr_repository" "ecr" {
-  name                 = var.namespace
-  # image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-
-
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket_prefix = var.namespace
   acl    = "private"
@@ -27,15 +16,7 @@ resource "aws_ssm_parameter" "BucketParameter" {
   }
 }
 //!Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECR}'
-resource "aws_ssm_parameter" "RepoURI" {
-  name = "/${var.namespace}/ecr/uri"
-  type = "String"
-  value = aws_ecr_repository.ecr.repository_url
-  tags = {
-    Name = var.namespace
-    environment = var.namespace
-  }
-}
+
 resource "aws_s3_bucket_public_access_block" "example" {
   bucket = aws_s3_bucket.codepipeline_bucket.id
   ignore_public_acls = true

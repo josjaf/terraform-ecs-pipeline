@@ -94,7 +94,7 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = "app"
+  family                   = "2048"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "${var.fargate_cpu}"
@@ -105,7 +105,7 @@ resource "aws_ecs_task_definition" "app" {
 [
   {
     "cpu": ${var.fargate_cpu},
-    "image": "${var.app_image}",
+    "image": "${aws_ecr_repository.ecr.repository_url}:2048",
     "memory": ${var.fargate_memory},
     "name": "app",
     "networkMode": "awsvpc",
@@ -160,7 +160,4 @@ resource "aws_ssm_parameter" "clusterparameter" {
     Name = var.namespace
     environment = var.namespace
   }
-}
-output "lb" {
-  value = aws_alb.main.dns_name
 }

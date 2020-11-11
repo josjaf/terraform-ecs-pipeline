@@ -43,7 +43,12 @@ resource "aws_iam_role_policy" "codebuildkms" {
 }
 EOF
 }
-
+data "aws_ssm_parameter" "ecr" {
+  name = "/${var.namespace}/ecr/uri"
+}
+data "aws_ssm_parameter" "ecrarn" {
+  name = "/${var.namespace}/ecr/arn"
+}
 resource "aws_codebuild_project" "dockerbuild" {
   name = var.namespace
   description = "test_codebuild_project"
@@ -62,7 +67,7 @@ resource "aws_codebuild_project" "dockerbuild" {
     privileged_mode = true
     environment_variable {
       name = "ecr"
-      value = aws_ecr_repository.ecr.repository_url
+      value = data.aws_ssm_parameter.ecr.value
     }
     environment_variable {
       name = "namespace"
@@ -118,7 +123,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 				"ssm:GetParameterHistory"
 			],
 			"Resource": [
-				"${aws_ssm_parameter.RepoURI.arn}",
+				"${data.aws_ssm_parameter.ecr.arn}",
 				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.namespace}/*",
 				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.namespace}/*"
 			]
@@ -146,7 +151,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 				"ecr:DeleteRepository"
 			],
 			"Resource": [
-				"${aws_ecr_repository.ecr.arn}"
+				"${data.aws_ssm_parameter.ecrarn.arn}"
 
 			]
 		},
