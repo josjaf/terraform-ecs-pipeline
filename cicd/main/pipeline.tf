@@ -126,7 +126,7 @@ resource "aws_codepipeline" "codepipeline" {
       provider = "CodeBuild"
       input_artifacts = [
         "source_output"]
-      #output_artifacts = ["build_output"]
+      output_artifacts = ["build_output"]
       version = "1"
 
       configuration = {
@@ -134,7 +134,26 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
   }
+  stage {
+    name = "Deploy"
 
+    action {
+      name = "ECSDeploy"
+      run_order = 1
+      category = "Deploy"
+      owner = "AWS"
+      provider = "ECS"
+      input_artifacts = [
+        "build_output"]
+      version = "1"
+
+      configuration = {
+        ClusterName = var.ecs_cluster_name
+        ServiceName = var.ecs_service_name
+        FileName = "imagedefinitions.json"
+      }
+    }
+  }
 }
 resource "aws_ssm_parameter" "PipelineParameter" {
   name = "${var.namespace}-pipeline"

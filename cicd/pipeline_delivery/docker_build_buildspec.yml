@@ -3,6 +3,7 @@ version: 0.2
 env:
   parameter-store:
     REPOSITORY_URI: /${namespace}/ecr/uri
+    SERVICE_NAME: /${namespace}/ecs/service
 
 phases:
   pre_build:
@@ -28,5 +29,5 @@ phases:
       - printf '[{"name":"%s","imageUri":"%s"}]' $SERVICE_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json
 
-#artifacts:
-#  files: imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json

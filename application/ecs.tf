@@ -90,7 +90,7 @@ resource "aws_alb_listener" "front_end" {
 ### ECS
 
 resource "aws_ecs_cluster" "main" {
-  name = "tf-ecs-cluster"
+  name = var.ecs_cluster_name
 }
 
 resource "aws_ecs_task_definition" "app" {
@@ -121,7 +121,7 @@ DEFINITION
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "tf-ecs-service"
+  name            = var.ecs_service_name
   cluster         = "${aws_ecs_cluster.main.id}"
   task_definition = "${aws_ecs_task_definition.app.arn}"
   desired_count   = "${var.app_count}"
@@ -143,7 +143,24 @@ resource "aws_ecs_service" "main" {
     "aws_alb_listener.front_end",
   ]
 }
-
+resource "aws_ssm_parameter" "serviceparameter" {
+  name = "/${var.namespace}/ecs/service"
+  type = "String"
+  value = aws_ecs_service.main.id
+  tags = {
+    Name = var.namespace
+    environment = var.namespace
+  }
+}
+resource "aws_ssm_parameter" "clusterparameter" {
+  name = "/${var.namespace}/ecs/cluster"
+  type = "String"
+  value = aws_ecs_cluster.main.id
+  tags = {
+    Name = var.namespace
+    environment = var.namespace
+  }
+}
 output "lb" {
   value = aws_alb.main.dns_name
 }

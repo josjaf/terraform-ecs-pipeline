@@ -119,7 +119,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 			],
 			"Resource": [
 				"${aws_ssm_parameter.RepoURI.arn}",
-				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter//${var.namespace}/*",
+				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.namespace}/*",
 				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.namespace}/*"
 			]
 		},
