@@ -89,65 +89,79 @@ resource "aws_codebuild_project" "dockerbuild" {
   }
 }
 resource "aws_iam_role_policy" "codebuild_policy" {
-  name = "codepipeline_policy"
+  name = "codebuild"
   role = aws_iam_role.codebuild-role.id
 
   policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect":"Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:GetObjectVersion",
-        "s3:GetBucketVersioning",
-        "s3:PutObject"
-      ],
-      "Resource": [
-        "${aws_s3_bucket.codepipeline_bucket.arn}",
-        "${aws_s3_bucket.codepipeline_bucket.arn}/*"
-      ]
-    },
-    {
-      "Effect":"Allow",
-      "Action": [
-      "ecr:GetAuthorizationToken",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-      "ecr:PutImage",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:DescribeRepositories",
-      "ecr:ListImages",
-      "ecr:DescribeImages",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImageScanFindings",
-      "ecr:StartImageScan",
-      "ecr:BatchDeleteImage",
-      "ecr:SetRepositoryPolicy",
-      "ecr:DeleteRepositoryPolicy",
-      "ecr:DeleteRepository"
-    ],
-      "Resource": [
-        "${aws_ecr_repository.ecr.arn}"
+	"Version": "2012-10-17",
+	"Statement": [{
+			"Effect": "Allow",
+			"Action": [
+				"s3:GetObject",
+				"s3:GetObjectVersion",
+				"s3:GetBucketVersioning",
+				"s3:PutObject"
+			],
+			"Resource": [
+				"${aws_s3_bucket.codepipeline_bucket.arn}",
+				"${aws_s3_bucket.codepipeline_bucket.arn}/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ssm:GetParameter",
+				"ssm:GetParametersByPath",
+				"ssm:GetParameters",
+				"ssm:DescribeParameters",
+				"ssm:GetParameterHistory"
+			],
+			"Resource": [
+				"${aws_ssm_parameter.RepoURI.arn}",
+				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter//${var.namespace}/*",
+				"arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.namespace}/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ecr:GetAuthorizationToken",
+				"ecr:InitiateLayerUpload",
+				"ecr:UploadLayerPart",
+				"ecr:CompleteLayerUpload",
+				"ecr:PutImage",
+				"ecr:BatchCheckLayerAvailability",
+				"ecr:GetDownloadUrlForLayer",
+				"ecr:GetRepositoryPolicy",
+				"ecr:DescribeRepositories",
+				"ecr:ListImages",
+				"ecr:DescribeImages",
+				"ecr:BatchGetImage",
+				"ecr:DescribeImageScanFindings",
+				"ecr:StartImageScan",
+				"ecr:BatchDeleteImage",
+				"ecr:SetRepositoryPolicy",
+				"ecr:DeleteRepositoryPolicy",
+				"ecr:DeleteRepository"
+			],
+			"Resource": [
+				"${aws_ecr_repository.ecr.arn}"
 
-      ]
-    },
-    {
-      "Effect":"Allow",
-      "Action": [
-      "ecr:GetAuthorizationToken"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ecr:GetAuthorizationToken"
 
-    ],
-      "Resource": [
-        "*"
+			],
+			"Resource": [
+				"*"
 
-      ]
-    }
-  ]
+			]
+		}
+	]
 }
 EOF
 }
