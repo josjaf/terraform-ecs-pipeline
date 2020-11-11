@@ -15,7 +15,7 @@ phases:
     commands:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
-      - docker build -t -t $REPOSITORY_URI:2048 application/
+      - docker build -t $REPOSITORY_URI:2048 application/
       - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
