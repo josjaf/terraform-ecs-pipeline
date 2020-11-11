@@ -151,7 +151,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 				"ecr:DeleteRepository"
 			],
 			"Resource": [
-				"${data.aws_ssm_parameter.ecrarn.arn}"
+				"${data.aws_ssm_parameter.ecrarn.value}"
 
 			]
 		},
