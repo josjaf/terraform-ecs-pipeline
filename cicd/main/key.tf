@@ -64,7 +64,24 @@ data "aws_iam_policy_document" "default" {
     resources = [
       "*"]
   }
-
+//  statement {
+//    sid = "DeleteMe"
+//    effect = "Allow"
+//    principals {
+//      type = "AWS"
+//      identifiers = [
+//        "arn:aws:iam::253737654488:role/josjaffe@amazon.com"]
+//    }
+//    actions = [
+//      "kms:DescribeKey",
+//      "kms:Decrypt",
+//      "kms:Encrypt",
+//      "kms:ReEncrypt*",
+//      "kms:GenerateDataKey*"
+//    ]
+//    resources = [
+//      "*"]
+//  }
   statement {
     sid = "Allow alias creation during setup"
     effect = "Allow"

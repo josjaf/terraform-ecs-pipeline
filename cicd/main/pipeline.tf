@@ -79,7 +79,29 @@ resource "aws_iam_role_policy" "cp-kms" {
 }
 EOF
 }
-
+resource "aws_iam_role_policy" "cb-kms" {
+  name_prefix = "kms"
+  role = aws_iam_role.codepipeline-role.id
+  policy = <<EOF
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:DescribeKey",
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+      ],
+      "Resource": [
+        "${aws_kms_key.main.arn}"
+      ]
+    }
+  ]
+}
+EOF
+}
 
 resource "aws_codepipeline" "codepipeline" {
   name = var.namespace
@@ -153,6 +175,22 @@ resource "aws_codepipeline" "codepipeline" {
         FileName = "imagedefinitions.json"
       }
     }
+//    action {
+//      name = "Prod"
+//      run_order = 2
+//      category = "Deploy"
+//      owner = "AWS"
+//      provider = "ECS"
+//      input_artifacts = [
+//        "build_output"]
+//      version = "1"
+//      role_arn = "arn:aws:iam::12345:role/josjaffe@amazon.com"
+//      configuration = {
+//        ClusterName = var.ecs_cluster_name
+//        ServiceName = var.ecs_service_name
+//        FileName = "imagedefinitions.json"
+//      }
+//    }
   }
 }
 resource "aws_ssm_parameter" "PipelineParameter" {

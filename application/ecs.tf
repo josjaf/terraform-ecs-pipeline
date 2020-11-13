@@ -13,7 +13,20 @@ data "aws_subnet_ids" "public_subnets" {
       "Public"]
   }
 }
-
+data "aws_subnet_ids" "private_subnets" {
+  vpc_id = var.vpc_id
+  filter {
+    name = "tag:Network"
+    values = [
+      "Private"]
+  }
+}
+data "aws_ssm_parameter" "ecr" {
+  name = "/${var.namespace}/ecr/uri"
+}
+data "aws_ssm_parameter" "ecrarn" {
+  name = "/${var.namespace}/ecr/arn"
+}
 ### Security
 
 # ALB Security group
@@ -107,7 +120,7 @@ resource "aws_ecs_task_definition" "app" {
 [
   {
     "cpu": ${var.fargate_cpu},
-    "image": "${aws_ecr_repository.ecr.repository_url}:2048",
+    "image": "${data.aws_ssm_parameter.ecr.value}:2048",
     "memory": ${var.fargate_memory},
     "name": "${var.ecs_service_name}",
     "networkMode": "awsvpc",
@@ -131,8 +144,8 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups = ["${aws_security_group.ecs_tasks.id}"]
-    subnets         = data.aws_subnet_ids.public_subnets.ids
-    assign_public_ip = true
+    subnets         = data.aws_subnet_ids.private_subnets.ids
+    assign_public_ip = false
   }
 
   load_balancer {
