@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_event_rule" "codecommittocodepipeline" {
-  name_prefix = "${var.namespace}-pipeline"
+//  name_prefix = "${var.namespace}-pipeline"
   description = "codecommit to codepipeline"
   event_pattern = <<PATTERN
 {
