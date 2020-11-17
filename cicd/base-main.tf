@@ -1,12 +1,12 @@
-terraform {
+//terraform {
 //  required_providers {
 //    aws = {
 //      source  = "hashicorp/aws"
-//      version = "3.1.0"
+////      version = "3.1.0"
 //    }
 //  }
 //  required_version = ">= 0.13"
-}
+//}
 
 provider "aws" {
   region = var.region
@@ -25,9 +25,9 @@ variable "bucket_region" {}
 variable "key" {}
 terraform {
   backend "s3" {
-    bucket = var.bucket
-    key    = var.key # hard coding since this is a less disposable
-    region = var.bucket_region
+    bucket = "josjaffe-terraform"
+    key    = "terraform/terraform-ecs-cicd.tf"
+    region = "us-east-1"
   }
 }
 
