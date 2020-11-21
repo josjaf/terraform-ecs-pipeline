@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
     rule {
       apply_server_side_encryption_by_default {
         kms_master_key_id = aws_kms_key.main.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -46,10 +46,8 @@ resource "aws_ssm_parameter" "BucketParameter" {
   name = "/${var.namespace}/bucket"
   type = "String"
   value = aws_s3_bucket.codepipeline_bucket.id
-  tags = {
-    Name = var.namespace
-    environment = var.namespace
-  }
+  tags = local.common_tags
+
 }
 //!Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECR}'
 

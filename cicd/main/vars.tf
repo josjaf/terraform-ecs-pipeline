@@ -16,3 +16,11 @@ variable "ecr_accounts" {
   description = "ecr accounts"
   default = ["805159726499","253737654488" ]
 }
+
+locals {
+  # Common tags to be assigned to all resources
+  common_tags = {
+    env = var.env
+    namespace   = var.namespace
+  }
+}
