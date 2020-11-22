@@ -1,11 +1,11 @@
 terraform {
-//  required_providers {
-//    aws = {
-//      source  = "hashicorp/aws"
-//      version = "3.1.0"
-//    }
-//  }
-//  required_version = ">= 0.13"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      //      version = "3.1.0"
+    }
+  }
+  required_version = ">= 0.13"
 }
 
 provider "aws" {
@@ -27,7 +27,7 @@ terraform {
   backend "s3" {
     bucket = var.bucket
     key    = var.key # hard coding since this is a less disposable
-    region = var.bucket_region
+    region = var.region
   }
 }
 variable "vpc_id" {}
