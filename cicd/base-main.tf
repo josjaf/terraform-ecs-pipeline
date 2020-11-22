@@ -25,9 +25,9 @@ variable "bucket_region" {}
 variable "key" {}
 terraform {
   backend "s3" {
-    bucket = "josjaffe-terraform"
-    key    = "terraform/terraform-ecs-cicd.tf"
-    region = "us-east-1"
+    bucket = var.bucket
+    key    = var.key
+    region = var.region
   }
 }
 //terraform {
