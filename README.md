@@ -6,6 +6,7 @@ This package is a Terraform Module using CodePipeline and Codebuild to push a Do
 * add the variable `bucket` with the newly created bucket
 * When calling the Init command, your config cannot have any unused variables, which is why we separate them
 * Deploy the `cicd` folder first. Release the Pipeline to build the image that the application stack will use
+    * The Pipeline will fail the first time it runs after the Image is built because there is no ECS Cluster and Service to deploy to
     * Under the `cicd` folder
     * `terraform init -backend-config="conf/beta-init.tfvars"`
     * `terraform apply -var-file conf/beta.tfvars`
