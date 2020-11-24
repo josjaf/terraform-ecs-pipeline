@@ -1,5 +1,5 @@
-resource "aws_iam_role" "ecs-role" {
-  name_prefix = "${var.namespace}"
+resource "aws_iam_role" "ecs-execution-role" {
+  name_prefix = "${var.namespace}-execution"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -15,13 +15,30 @@ resource "aws_iam_role" "ecs-role" {
 }
 EOF
 }
-resource "aws_iam_role_policy_attachment" "codepipeline-attach" {
-  role = aws_iam_role.ecs-role.id
+resource "aws_iam_role" "ecs-task-role" {
+  name_prefix = "${var.namespace}-task"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+resource "aws_iam_role_policy_attachment" "ecstasksattach" {
+  role = aws_iam_role.ecs-execution-role.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
-resource "aws_iam_role_policy" "codepipeline_policy" {
+resource "aws_iam_role_policy" "ecrpolicy" {
   name = "ecr"
-  role = aws_iam_role.ecs-role.id
+  role = aws_iam_role.ecs-execution-role.id
 
   policy = <<EOF
 {
