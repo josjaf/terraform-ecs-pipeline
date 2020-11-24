@@ -12,6 +12,7 @@ This package is a Terraform Module using CodePipeline and Codebuild to push a Do
     * `terraform apply -var-file conf/beta.tfvars`
     * `pip install git-remote-codecommit`
     * `git remote add cc codecommit::us-east-1://terraform-ecs `
+    * `git push cc master`
 
     * Under the `application folder`
     * `terraform init -backend-config="conf/beta-init.tfvars" --reconfigure`
