@@ -108,6 +108,11 @@ resource "aws_ecs_cluster" "main" {
 
 # name here has to match what codepipeline and codebuild is publishing in the imagedefinitions.json
 # you cannot update name
+
+resource "aws_cloudwatch_log_group" "log_grouo" {
+  name_prefix = var.namespace
+  retention_in_days = 14
+}
 resource "aws_ecs_task_definition" "app" {
   family                   = "2048"
   network_mode             = "awsvpc"
@@ -130,7 +135,15 @@ resource "aws_ecs_task_definition" "app" {
         "containerPort": ${var.app_port},
         "hostPort": ${var.app_port}
       }
-    ]
+    ],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "${aws_cloudwatch_log_group.log_grouo.name}",
+            "awslogs-region": "${var.region}",
+            "awslogs-stream-prefix": "2048"
+        }
+    }
   }
 ]
 DEFINITION
