@@ -4,9 +4,15 @@ image:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-
 variables:
-  PLAN: application/plan.tfplan
+  TF_ROOT: ${CI_PROJECT_DIR}/application
+  PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
+
+cache:
+  key: "${TF_ROOT}"
+  paths:
+    - ${TF_ROOT}/.terraform/
+
 
 
 before_script:
