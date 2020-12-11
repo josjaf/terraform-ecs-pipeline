@@ -4,6 +4,11 @@ image:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
+
+variables:
+  PLAN: plan.tfplan
+
+
 before_script:
   - rm -rf .terraform
   - terraform --version
@@ -23,19 +28,19 @@ validate:
 
 plan:
   stage: plan
-
   script:
-    - terraform plan -out "planfile" -var-file conf/beta.tfvars
+    - terraform plan -out=$PLAN -var-file conf/beta.tfvars
   dependencies:
     - validate
   artifacts:
+    name: plan
     paths:
-      - application/planfile
+      - $PLAN
 
 apply:
   stage: apply
   script:
-    - terraform apply -input=false "application/planfile"
+    - terraform apply -input=false $PLAN
   dependencies:
     - plan
   when: manual
