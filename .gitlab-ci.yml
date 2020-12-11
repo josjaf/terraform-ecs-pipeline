@@ -6,7 +6,7 @@ image:
 
 
 variables:
-  PLAN: plan.tfplan
+  PLAN: application/plan.tfplan
 
 
 before_script:
