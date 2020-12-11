@@ -30,12 +30,13 @@ stages:
 validate:
   stage: validate
   script:
+    - terraform init -backend-config=conf/beta-init.tfvars --reconfigure
     - terraform validate
 
 plan:
   stage: plan
   script:
-    - terraform init -backend-config=conf/beta-init.tfvars --reconfigure
+
     - terraform plan -var-file conf/beta.tfvars -out=$PLAN
   dependencies:
     - validate
