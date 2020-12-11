@@ -24,17 +24,19 @@ validate:
 plan:
   stage: plan
   script:
+    - cd application
     - terraform plan -out "planfile" -var-file conf/beta.tfvars
   dependencies:
     - validate
   artifacts:
     paths:
-      - application/planfile
+      - planfile
 
 apply:
   stage: apply
   script:
-    - terraform apply -input=false "application/planfile"
+    - cd application
+    - terraform apply -input=false "planfile"
   dependencies:
     - plan
   when: manual
