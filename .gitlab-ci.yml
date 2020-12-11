@@ -8,11 +8,11 @@ variables:
   TF_ROOT: ${CI_PROJECT_DIR}/application
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
 
-#cache:
-#  key: "${TF_ROOT}"
-#  paths:
-#    - ${TF_ROOT}/.terraform/
-
+cache:
+  key: "${TF_ROOT}"
+  paths:
+    - ${TF_ROOT}/.terraform/plugins
+    - ${TF_ROOT}/.terraform/providers
 
 
 before_script:
