@@ -65,6 +65,7 @@ ecr:
     - amazon-linux-extras install docker
     - aws --version
     - docker --version
+    - cd application
   script:
     #- pip3 install awscli
     #- $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
