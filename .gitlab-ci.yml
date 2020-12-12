@@ -59,6 +59,8 @@ ecr:
   script:
     #- pip3 install awscli
     #- $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - aws --version
+    - echo getting REPOSITORY_URI from AWS SSM
     - REPOSITORY_URI=$(aws ssm get-parameter --name "/${DEV_NAMESPACE}/ecr/uri" --query Parameter.Value --output text)
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
     - docker build -t $REPOSITORY_URI:2048 .
