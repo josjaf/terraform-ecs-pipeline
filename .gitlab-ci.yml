@@ -59,8 +59,8 @@ apply:
 ecr:
   stage: ecr
   image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
-#  services:
-#    - docker:19.03.12-dind
+  services:
+    - docker
 #  image:
 #    #name: amazon/aws-cli
 #    name: docker:latest
