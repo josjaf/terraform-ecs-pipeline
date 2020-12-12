@@ -57,11 +57,17 @@ ecr:
   stage: ecr
   image:
     name: amazon/aws-cli
-    entrypoint: ["/bin/sh -c"]
+#    entrypoint: ["/bin/sh -c"]
+    entrypoint: [""]
+  services:
+    - docker:dind
+  before_script:
+    - amazon-linux-extras install docker
+    - aws --version
+    - docker --version
   script:
     #- pip3 install awscli
     #- $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-    - aws --version
     - echo getting REPOSITORY_URI from AWS SSM
     - REPOSITORY_URI=$(aws ssm get-parameter --name "/${DEV_NAMESPACE}/ecr/uri" --query Parameter.Value --output text)
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
