@@ -7,7 +7,7 @@ image:
 variables:
   TF_ROOT: ${CI_PROJECT_DIR}/application
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
-  DEV_NAMESPACE: terraform-ecs
+
 cache:
   key: "${TF_ROOT}"
   paths:
@@ -26,7 +26,6 @@ stages:
   - validate
   - plan
   - apply
-  - ecr
 
 validate:
   stage: validate
@@ -52,15 +51,3 @@ apply:
   dependencies:
     - plan
   #when: manual
-
-ecr:
-  stage: ecr
-  script:
-    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-    - export REPOSITORY_URI=$(aws ssm get-parameter --name "/${DEV_NAMESPACE}/ecr/uri" --query Parameter.Value --output text)
-    - docker build -t $REPOSITORY_URI:2048 .
-    - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
-    - docker push $REPOSITORY_URI:2048
-    - docker push $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
-  dependencies:
-    - apply
