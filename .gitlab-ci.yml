@@ -58,9 +58,9 @@ apply:
 
 ecr:
   stage: ecr
-  image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
-  services:
-    - docker
+  image: docker
+  #image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+
 #  image:
 #    #name: amazon/aws-cli
 #    name: docker:latest
@@ -69,8 +69,8 @@ ecr:
 #  services:
 #    - docker:dind
   before_script:
-    #- apk add --no-cache curl jq python3 py-pip
-    #- pip install awscli
+    - apk add --no-cache curl jq python3 py-pip
+    - pip install awscli
     #- amazon-linux-extras install docker
     - aws --version
     - docker --version
