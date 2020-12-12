@@ -55,8 +55,9 @@ apply:
 
 ecr:
   stage: ecr
-  image: amazon/aws-cli
-  entrypoint: [""]
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
   script:
     #- pip3 install awscli
     #- $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
