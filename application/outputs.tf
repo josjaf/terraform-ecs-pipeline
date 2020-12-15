@@ -21,3 +21,7 @@ output "ecs_task_role_arn" {
 output "task_version_2048" {
   value = aws_ecs_task_definition.app.revision
 }
+
+output "ecr_uri" {
+  value = aws_ecr
+}
