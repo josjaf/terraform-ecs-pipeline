@@ -17,3 +17,6 @@ This package is a Terraform Module using CodePipeline and Codebuild to push a Do
     * Under the `application folder`
     * `terraform init -backend-config="conf/beta-init.tfvars" --reconfigure`
     * `terraform apply -var-file conf/beta.tfvars`
+  
+
+* If you do no want to use CodePipeline and want to use Gitlab instead, you still must deploy the ecr and key with the Pipeline
