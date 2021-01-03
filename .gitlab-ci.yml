@@ -58,14 +58,13 @@ apply:
 
 ecr:
   stage: ecr
-#  image: docker:19.03.12
-  image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+  image: docker:19.03.12
+  #image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
   services:
     - docker:19.03.12-dind
   before_script:
-    #- apk add --no-cache curl jq python3 py-pip
-    #- pip install awscli
-    #- amazon-linux-extras install docker
+    - apk add --no-cache curl jq wget unzip python3 py-pip
+    - pip install awscli
     - aws --version
     - docker --version
     - cd application
