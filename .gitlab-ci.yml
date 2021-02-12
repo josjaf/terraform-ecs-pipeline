@@ -60,7 +60,7 @@ apply:
 
 ecr:
   stage: ecr
-  image: alpine
+  image: docker:19.03.12
   #image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
   services:
     - docker:19.03.12-dind
