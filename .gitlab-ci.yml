@@ -87,7 +87,7 @@ ecr:
     - export CLUSTER=$(jq -r .cluster.value $TFOUTPUT)
     - export SERVICE=$(jq -r .service.value $TFOUTPUT)
     - echo SERVICE $SERVICE CLUSTER $CLUSTER
-    - aws ecs update-service --cluster $CLUSTER--service $SERVICE
+    - aws ecs update-service --cluster $CLUSTER --service $SERVICE
 
     #- aws ecs update-service --cluster $(terraform output -json | jq -r .cluster.value) --service $(terraform output -json | jq -r .service.value)
   dependencies:
