@@ -8,7 +8,7 @@ variables:
   TF_ROOT: ${CI_PROJECT_DIR}/application
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
   DEV_NAMESPACE: terraform-ecs
-  TFOUTPUT: ${CI_PROJECT_DIR}/application/output.json
+  TF_OUTPUT: ${CI_PROJECT_DIR}/application/output.json
   #DOCKER_HOST: tcp://docker:2375/
 
 
@@ -20,8 +20,6 @@ cache:
 
 
 before_script:
-  #- rm -rf .terraform
-  - echo $AWS_ACCESS_KEY_ID
   - terraform --version
   - cd application
   - terraform init -backend-config=conf/beta-init.tfvars --reconfigure
@@ -55,12 +53,12 @@ apply:
   stage: apply
   script:
     - terraform apply -input=false $PLAN
-    - terraform output -json > $TFOUTPUT
+    - terraform output -json > $TF_OUTPUT
   dependencies:
     - plan
   artifacts:
     paths:
-      - $TFOUTPUT
+      - $TF_OUTPUT
     expire_in: 1 week
   #when: manual
 
@@ -84,8 +82,8 @@ ecr:
     - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
     - docker push $REPOSITORY_URI:2048
     - docker push $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
-    - export CLUSTER=$(jq -r .cluster.value $TFOUTPUT)
-    - export SERVICE=$(jq -r .service.value $TFOUTPUT)
+    - export CLUSTER=$(jq -r .cluster.value $TF_OUTPUT)
+    - export SERVICE=$(jq -r .service.value $TF_OUTPUT)
     - echo SERVICE $SERVICE CLUSTER $CLUSTER
     - aws ecs update-service --cluster $CLUSTER --service $SERVICE
 
