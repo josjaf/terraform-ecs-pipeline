@@ -60,7 +60,7 @@ apply:
   artifacts:
     paths:
       - output.json
-     expire_in: 1 week
+    expire_in: 1 week
   #when: manual
 
 ecr:
