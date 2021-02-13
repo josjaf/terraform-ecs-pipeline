@@ -8,7 +8,7 @@ variables:
   TF_ROOT: ${CI_PROJECT_DIR}/application
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
   DEV_NAMESPACE: terraform-ecs
-  TFOUTPUT: application/output.json
+  TFOUTPUT: ${CI_PROJECT_DIR}/application/output.json
   #DOCKER_HOST: tcp://docker:2375/
 
 
