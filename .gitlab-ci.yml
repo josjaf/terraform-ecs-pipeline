@@ -59,7 +59,7 @@ apply:
     - plan
   artifacts:
     paths:
-      - output.json
+      - application/output.json
     expire_in: 1 week
   #when: manual
 
