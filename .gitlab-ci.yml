@@ -54,8 +54,13 @@ apply:
   stage: apply
   script:
     - terraform apply -input=false $PLAN
+    - terraform output -json > output.json
   dependencies:
     - plan
+  artifacts:
+    paths:
+      - output.json
+     expire_in: 1 week
   #when: manual
 
 ecr:
@@ -78,6 +83,10 @@ ecr:
     - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
     - docker push $REPOSITORY_URI:2048
     - docker push $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA
-    - aws ecs update-service --cluster $(terraform output -json | jq -r .cluster.value) --service $(terraform output -json | jq -r .service.value)
+    - export CLUSTER=$(cat output.json | jq -r .cluster.value)
+    - export SERVICE=$(cat output.json | jq -r .service.value)
+    - aws ecs update-service --cluster $CLUSTER--service $SERVICE
+
+    #- aws ecs update-service --cluster $(terraform output -json | jq -r .cluster.value) --service $(terraform output -json | jq -r .service.value)
   dependencies:
     - apply
