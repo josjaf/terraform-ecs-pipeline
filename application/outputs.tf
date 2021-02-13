@@ -4,7 +4,7 @@ output "lb" {
   value = aws_alb.main.dns_name
 }
 
-output "service_name_2048" {
+output "service" {
   value = aws_ecs_service.main.name
 }
 
@@ -20,4 +20,8 @@ output "ecs_task_role_arn" {
 
 output "task_version_2048" {
   value = aws_ecs_task_definition.app.revision
+}
+
+output "cluster" {
+  value = aws_ecs_cluster.main.name
 }
