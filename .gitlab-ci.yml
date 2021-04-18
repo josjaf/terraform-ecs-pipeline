@@ -90,3 +90,7 @@ ecr:
     #- aws ecs update-service --cluster $(terraform output -json | jq -r .cluster.value) --service $(terraform output -json | jq -r .service.value)
   dependencies:
     - apply
+  artifacts:
+    name: TF_OUTPUT
+    paths:
+      - $TF_OUTPUT
