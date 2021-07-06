@@ -21,7 +21,6 @@ cache:
 
 before_script:
   - terraform --version
-  - cd application
   - terraform -chdir=application init -backend-config=conf/beta-init.tfvars --reconfigure
 
 
