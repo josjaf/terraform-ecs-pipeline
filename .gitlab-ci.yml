@@ -22,7 +22,7 @@ cache:
 before_script:
   - terraform --version
   - cd application
-  - terraform init -backend-config=conf/beta-init.tfvars --reconfigure
+  - terraform -chdir=application init -backend-config=conf/beta-init.tfvars --reconfigure
 
 
 stages:
@@ -41,7 +41,8 @@ plan:
   stage: plan
   script:
 
-    - terraform plan -var-file conf/beta.tfvars -out=$PLAN
+    - terraform -chdir=application plan -var-file conf/beta.tfvars -out=$PLAN
+
   dependencies:
     - validate
   artifacts:

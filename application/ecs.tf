@@ -2,7 +2,7 @@ data "aws_vpc" "VPC" {
   filter {
     name = "vpc-id"
     values = [
-      var.vpc_id]
+    var.vpc_id]
   }
 }
 data "aws_subnet_ids" "public_subnets" {
@@ -10,7 +10,7 @@ data "aws_subnet_ids" "public_subnets" {
   filter {
     name = "tag:Network"
     values = [
-      "Public"]
+    "Public"]
   }
 }
 data "aws_subnet_ids" "private_subnets" {
@@ -18,7 +18,7 @@ data "aws_subnet_ids" "private_subnets" {
   filter {
     name = "tag:Network"
     values = [
-      "Private"]
+    "Private"]
   }
 }
 data "aws_ssm_parameter" "ecr" {
@@ -44,9 +44,9 @@ resource "aws_security_group" "lb" {
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -59,8 +59,8 @@ resource "aws_security_group" "ecs_tasks" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = "${var.app_port}"
-    to_port         = "${var.app_port}"
+    from_port       = var.app_port
+    to_port         = var.app_port
     security_groups = ["${aws_security_group.lb.id}"]
   }
 
@@ -90,12 +90,12 @@ resource "aws_alb_target_group" "app" {
 
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "front_end" {
-  load_balancer_arn = "${aws_alb.main.id}"
+  load_balancer_arn = aws_alb.main.id
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.app.id}"
+    target_group_arn = aws_alb_target_group.app.id
     type             = "forward"
   }
 }
@@ -110,17 +110,17 @@ resource "aws_ecs_cluster" "main" {
 # you cannot update name
 
 resource "aws_cloudwatch_log_group" "log_grouo" {
-  name_prefix = var.namespace
+  name_prefix       = var.namespace
   retention_in_days = 14
 }
 resource "aws_ecs_task_definition" "app" {
   family                   = "2048"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "${var.fargate_cpu}"
-  memory                   = "${var.fargate_memory}"
-  execution_role_arn = aws_iam_role.ecs-execution-role.arn # this is the role for ecs to pull images
-//  task_role_arn = aws_iam_role.ecs-task-role.arn
+  cpu                      = var.fargate_cpu
+  memory                   = var.fargate_memory
+  execution_role_arn       = aws_iam_role.ecs-execution-role.arn # this is the role for ecs to pull images
+  //  task_role_arn = aws_iam_role.ecs-task-role.arn
 
   container_definitions = <<DEFINITION
 [
@@ -150,11 +150,11 @@ DEFINITION
 }
 
 resource "aws_ssm_parameter" "taskdefinition" {
-  name = "/${var.namespace}/ecs/taskdefinition"
-  type = "String"
+  name  = "/${var.namespace}/ecs/taskdefinition"
+  type  = "String"
   value = aws_ecs_task_definition.app.id
   tags = {
-    Name = var.namespace
+    Name        = var.namespace
     environment = var.namespace
   }
 }
@@ -162,42 +162,42 @@ resource "aws_ssm_parameter" "taskdefinition" {
 
 resource "aws_ecs_service" "main" {
   name            = var.ecs_service_name
-  cluster         = "${aws_ecs_cluster.main.id}"
-  task_definition = "${aws_ecs_task_definition.app.arn}"
-  desired_count   = "${var.app_count}"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = var.app_count
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = ["${aws_security_group.ecs_tasks.id}"]
-    subnets         = data.aws_subnet_ids.private_subnets.ids
+    security_groups  = ["${aws_security_group.ecs_tasks.id}"]
+    subnets          = data.aws_subnet_ids.private_subnets.ids
     assign_public_ip = false
   }
 
   load_balancer {
-    target_group_arn = "${aws_alb_target_group.app.id}"
-    container_name   = "${var.ecs_service_name}"
-    container_port   = "${var.app_port}"
+    target_group_arn = aws_alb_target_group.app.id
+    container_name   = var.ecs_service_name
+    container_port   = var.app_port
   }
 
   depends_on = [
-    "aws_alb_listener.front_end",
+    aws_alb_listener.front_end,
   ]
 }
 resource "aws_ssm_parameter" "serviceparameter" {
-  name = "/${var.namespace}/ecs/service"
-  type = "String"
+  name  = "/${var.namespace}/ecs/service"
+  type  = "String"
   value = aws_ecs_service.main.name
   tags = {
-    Name = var.namespace
+    Name        = var.namespace
     environment = var.namespace
   }
 }
 resource "aws_ssm_parameter" "clusterparameter" {
-  name = "/${var.namespace}/ecs/cluster"
-  type = "String"
+  name  = "/${var.namespace}/ecs/cluster"
+  type  = "String"
   value = aws_ecs_cluster.main.id
   tags = {
-    Name = var.namespace
+    Name        = var.namespace
     environment = var.namespace
   }
 }
