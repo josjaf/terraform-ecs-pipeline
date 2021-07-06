@@ -52,8 +52,8 @@ plan:
 apply:
   stage: apply
   script:
-    - terraform apply -input=false $PLAN
-    - terraform output -json > $TF_OUTPUT
+    - terraform -chdir=application apply -input=false $PLAN
+    - terraform -chdir=application output -json > $TF_OUTPUT
   dependencies:
     - plan
   artifacts:
