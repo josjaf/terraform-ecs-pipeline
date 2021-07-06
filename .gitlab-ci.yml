@@ -12,6 +12,28 @@ variables:
   #DOCKER_HOST: tcp://docker:2375/
 
 
+.base-terraform:
+  image:
+  name: hashicorp/terraform:0.15.5
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  variables:
+    TF_IN_AUTOMATION: "true"
+#    TF_CLI_ARGS: "-input=false"
+  before_script:
+    - terraform --version
+    - echo terraform -chdir=${TF_ROOT} init -backend-config=conf/beta-init.tfvars --reconfigure
+
+    - terraform -chdir=${TF_ROOT} init -backend-config=conf/beta-init.tfvars --reconfigure
+
+  cache:
+    key: "${TF_ROOT}"
+    paths:
+      - ${TF_ROOT}/.terraform/plugins
+      - ${TF_ROOT}/.terraform/providers
+      
+
 cache:
   key: "${TF_ROOT}"
   paths:
@@ -21,7 +43,7 @@ cache:
 
 before_script:
   - terraform --version
-  - terraform -chdir=application init -backend-config=conf/beta-init.tfvars --reconfigure
+  - terraform -chdir=${TF_ROOT} init -backend-config=conf/beta-init.tfvars --reconfigure
 
 
 stages:
@@ -40,7 +62,7 @@ plan:
   stage: plan
   script:
 
-    - terraform -chdir=application plan -var-file conf/beta.tfvars -out=$PLAN
+    - terraform -chdir=${TF_ROOT} plan -var-file conf/beta.tfvars -out=$PLAN
 
   dependencies:
     - validate
@@ -52,8 +74,8 @@ plan:
 apply:
   stage: apply
   script:
-    - terraform -chdir=application apply -input=false $PLAN
-    - terraform -chdir=application output -json > $TF_OUTPUT
+    - terraform -chdir=${TF_ROOT} apply -input=false $PLAN
+    - terraform -chdir=${TF_ROOT} output -json > $TF_OUTPUT
   dependencies:
     - plan
   artifacts:
