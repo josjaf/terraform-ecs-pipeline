@@ -25,3 +25,7 @@ output "task_version_2048" {
 output "cluster" {
   value = aws_ecs_cluster.main.name
 }
+
+output "task_definition" {
+  value = aws_ecs_task_definition.app.arn
+}
