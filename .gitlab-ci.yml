@@ -20,6 +20,7 @@ variables:
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   variables:
     TF_IN_AUTOMATION: "true"
+    TF_INPUT: "false
   #    TF_CLI_ARGS: "-input=false"
   before_script:
     - terraform --version
@@ -60,6 +61,7 @@ validate:
 
 plan:
   stage: plan
+  extends: .base-terraform
   script:
 
     - terraform -chdir=${TF_ROOT} plan -var-file conf/beta.tfvars -out=$PLAN
@@ -73,8 +75,9 @@ plan:
 
 apply:
   stage: apply
+  extends: .base-terraform
   script:
-    - terraform -chdir=${TF_ROOT} apply -input=false $PLAN
+    - terraform -chdir=${TF_ROOT} apply $PLAN
     - terraform -chdir=${TF_ROOT} output -json > $TF_OUTPUT
   dependencies:
     - plan
@@ -84,10 +87,11 @@ apply:
     expire_in: 1 week
   #when: manual
 
+
+# here you can use parameters or TF Outputs to get the value of the ecr uri
 ecr:
   stage: ecr
   image: docker:19.03.12
-  #image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
   services:
     - docker:19.03.12-dind
   before_script:
