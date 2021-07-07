@@ -14,13 +14,13 @@ variables:
 
 .base-terraform:
   image:
-  name: hashicorp/terraform:0.15.5
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    name: hashicorp/terraform:0.15.5
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   variables:
     TF_IN_AUTOMATION: "true"
-    TF_INPUT: "false
+    TF_INPUT: "false"
   #    TF_CLI_ARGS: "-input=false"
   before_script:
     - terraform --version
