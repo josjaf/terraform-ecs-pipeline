@@ -1,32 +1,4 @@
-data "aws_vpc" "VPC" {
-  filter {
-    name = "vpc-id"
-    values = [
-    var.vpc_id]
-  }
-}
-data "aws_subnet_ids" "public_subnets" {
-  vpc_id = var.vpc_id
-  filter {
-    name = "tag:Network"
-    values = [
-    "Public"]
-  }
-}
-data "aws_subnet_ids" "private_subnets" {
-  vpc_id = var.vpc_id
-  filter {
-    name = "tag:Network"
-    values = [
-    "Private"]
-  }
-}
-data "aws_ssm_parameter" "ecr" {
-  name = "/${var.namespace}/ecr/uri"
-}
-data "aws_ssm_parameter" "ecrarn" {
-  name = "/${var.namespace}/ecr/arn"
-}
+
 ### Security
 
 # ALB Security group
@@ -149,15 +121,7 @@ resource "aws_ecs_task_definition" "app" {
 DEFINITION
 }
 
-resource "aws_ssm_parameter" "taskdefinition" {
-  name  = "/${var.namespace}/ecs/taskdefinition"
-  type  = "String"
-  value = aws_ecs_task_definition.app.id
-  tags = {
-    Name        = var.namespace
-    environment = var.namespace
-  }
-}
+
 
 
 resource "aws_ecs_service" "main" {
@@ -183,21 +147,4 @@ resource "aws_ecs_service" "main" {
     aws_alb_listener.front_end,
   ]
 }
-resource "aws_ssm_parameter" "serviceparameter" {
-  name  = "/${var.namespace}/ecs/service"
-  type  = "String"
-  value = aws_ecs_service.main.name
-  tags = {
-    Name        = var.namespace
-    environment = var.namespace
-  }
-}
-resource "aws_ssm_parameter" "clusterparameter" {
-  name  = "/${var.namespace}/ecs/cluster"
-  type  = "String"
-  value = aws_ecs_cluster.main.id
-  tags = {
-    Name        = var.namespace
-    environment = var.namespace
-  }
-}
+
