@@ -52,6 +52,7 @@ resource "aws_ssm_parameter" "BucketParameter" {
 //!Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECR}'
 
 resource "aws_s3_bucket_public_access_block" "example" {
+  depends_on = [aws_s3_bucket.codepipeline_bucket, aws_s3_bucket_policy.s3]
   bucket = aws_s3_bucket.codepipeline_bucket.id
   ignore_public_acls = true
   restrict_public_buckets = true
