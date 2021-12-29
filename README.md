@@ -8,8 +8,8 @@ This package is a Terraform Module using CodePipeline and Codebuild to push a Do
 * Deploy the `cicd` folder first. Release the Pipeline to build the image that the application stack will use
     * The Pipeline will fail the first time it runs after the Image is built because there is no ECS Cluster and Service to deploy to
     * Under the `cicd` folder from the root
-    * `terraform init -backend-config="conf/beta-init.tfvars"`
-    * `terraform apply -var-file conf/beta.tfvars`
+    * `terraform -chdir=application init -backend-config="conf/beta-init.tfvars --reconfigure"`
+    * `terraform -chdir=application apply -var-file conf/beta.tfvars`
     * `pip install git-remote-codecommit`
     * `git remote add cc codecommit::us-east-1://terraform-ecs `
 
