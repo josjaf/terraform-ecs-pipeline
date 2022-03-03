@@ -7,6 +7,9 @@ cicd-deploy:
 cicd-destroy:
 	terraform -chdir=cicd init -backend-config="conf/beta-init.tfvars" --reconfigure base-tf
 	terraform -chdir=cicd destory -var-file "conf/beta.tfvars" base-tf
+app:
+	terraform -chdir=application init -backend-config="conf/beta-init.tfvars" --reconfigure
+	terraform -chdir=application apply -var-file "conf/beta.tfvars" -auto-approve
 deploy-all:
 	terraform -chdir=cicd init -backend-config="conf/beta-init.tfvars" --reconfigure
 	terraform -chdir=cicd apply -var-file "conf/beta.tfvars" -auto-approve
