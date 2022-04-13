@@ -2,7 +2,7 @@
 
 resource "aws_alb" "main" {
   name = "tf-ecs-chat"
-  subnets = data.aws_subnet_ids.public_subnets.ids
+  subnets = data.aws_subnets.public_subnets.ids
   security_groups = [
     "${aws_security_group.lb.id}"]
   tags = merge(
@@ -112,7 +112,7 @@ resource "aws_ecs_service" "main" {
   network_configuration {
     security_groups = [
       "${aws_security_group.ecs_tasks.id}"]
-    subnets = data.aws_subnet_ids.private_subnets.ids
+    subnets = data.aws_subnets.private_subnets.ids
     assign_public_ip = false
   }
 

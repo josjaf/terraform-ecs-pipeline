@@ -28,8 +28,8 @@ data "aws_iam_policy_document" "s3" {
     sid = "s3"
     effect = "Allow"
     principals {
-      identifiers = [for account_id in var.ecr_accounts:
-      "arn:aws:iam::${account_id}:role/josjaffe@amazon.com"
+      identifiers = [for account_id in [data.aws_caller_identity.current.account_id]:
+      "arn:aws:iam::${account_id}:root"
       ]
       type = "AWS"
     }

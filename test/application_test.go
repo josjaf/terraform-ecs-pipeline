@@ -10,6 +10,8 @@ import (
 
 	awsSDK "github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/assert"
+    "github.com/aws/aws-sdk-go/aws/session"
+    "github.com/aws/aws-sdk-go/service/iam"
 )
 
 // An example of how to test the Terraform module in examples/terraform-aws-ecs-example using Terratest.
@@ -67,4 +69,15 @@ func TestTerraformAwsEcsExample(t *testing.T) {
 	assert.Equal(t, "256", awsSDK.StringValue(task.Cpu))
 	assert.Equal(t, "512", awsSDK.StringValue(task.Memory))
 	assert.Equal(t, "awsvpc", awsSDK.StringValue(task.NetworkMode))
+
+    svc := iam.New(session.New())
+    input := &iam.GetRoleInput{
+        RoleName: aws.String("terraform-ecs-pipeline-test-execution"),
+    }
+    GetRole, GetRoleErr := svc.GetRole(input)
+    if GetRoleErr != nil {
+        fmt.Println("Error", GetRoleErr)
+        return
+    }
+    assert.Equal(t, "terraform-ecs-pipeline-test-execution", awsSDK.StringValue(*GetRole.Role.RoleName))
 }

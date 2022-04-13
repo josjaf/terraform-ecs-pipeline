@@ -1,9 +1,3 @@
-
-variable "app_image" {
-  description = "Docker image to run in the ECS cluster"
-  default     = "805159726499.dkr.ecr.us-east-1.amazonaws.com/terraform-ecs:terraform-ecs"
-}
-
 variable "app_port" {
   description = "Port exposed by the docker image to redirect traffic to"
   default     = 80
@@ -33,8 +27,6 @@ variable "ecs_cluster_name" {
   description = "cluster name for ecs"
   default     = "tf-ecs-cluster"
 }
-
-variable "ecr_accounts" {
-  description = "ecr accounts"
-  default     = ["805159726499", "253737654488"]
-}
+variable "vpc_tag" {}
+variable "vpc_tags_public_subnets" {}
+variable "vpc_tags_private_subnets" {}

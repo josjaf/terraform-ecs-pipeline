@@ -30,7 +30,6 @@ terraform {
     region = var.region
   }
 }
-variable "vpc_id" {}
 
 //module "ecs-application" {
 //  source    = "./ecs"

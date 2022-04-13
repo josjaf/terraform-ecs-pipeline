@@ -104,7 +104,7 @@ EOF
 }
 
 resource "aws_codepipeline" "codepipeline" {
-  depends_on = [aws_iam_role_policy.codepipeline_cc_policy]
+  depends_on = [aws_iam_role_policy.codepipeline_cc_policy, aws_ssm_parameter.RepoArn, aws_ssm_parameter.RepoURI]
   name = var.namespace
   role_arn = aws_iam_role.codepipeline-role.arn
 

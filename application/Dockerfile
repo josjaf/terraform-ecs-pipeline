@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM public.ecr.aws/ubuntu/ubuntu:20.04
 
 RUN apt-get update
 RUN apt-get install -y nginx zip curl
