@@ -29,3 +29,7 @@ output "cluster" {
 output "task_definition" {
   value = aws_ecs_task_definition.app.arn
 }
+
+output "ecr_uri" {
+  value = aws_ecr_repository.ecr.repository_url
+}

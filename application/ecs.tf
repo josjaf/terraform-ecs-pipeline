@@ -78,7 +78,7 @@ resource "aws_ecs_task_definition" "app" {
 [
   {
     "cpu": ${var.fargate_cpu},
-    "image": "${data.aws_ssm_parameter.ecr.value}:2048",
+    "image": "${aws_ecr_repository.ecr.repository_url}:2048",
     "memory": ${var.fargate_memory},
     "name": "${var.ecs_service_name}",
     "networkMode": "awsvpc",

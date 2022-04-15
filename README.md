@@ -4,9 +4,9 @@ This package is a Terraform Module using CodePipeline and Codebuild to push a Do
 # Setup
 * [Create a State File Bucket](https://github.com/josjaf/examples/blob/master/aws/s3/tf_state_file.py)
 * add the variable `bucket` with the newly created bucket
-* When calling the Init command, your config cannot have any unused variables, which is why we separate them
+* When calling the Init command, your config cannot have any unused variables, which is why we separate a config for init and plan/apply
 * Deploy the `cicd` folder first. Release the Pipeline to build the image that the application stack will use
-    * The Pipeline will fail the first time it runs after the Image is built because there is no ECS Cluster and Service to deploy to
+    * The Pipeline will fail the first time it runs after the Image is built because there is no ECS Cluster and Service to deploy to. This is normal behavior. 
     * Under the `cicd` folder from the root
     * `terraform -chdir=application init -backend-config="conf/beta-init.tfvars --reconfigure"`
     * `terraform -chdir=application apply -var-file conf/beta.tfvars`
