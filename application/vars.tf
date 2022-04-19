@@ -30,3 +30,4 @@ variable "ecs_cluster_name" {
 variable "vpc_tag" {}
 variable "vpc_tags_public_subnets" {}
 variable "vpc_tags_private_subnets" {}
+variable "vpc_tags_isolated_subnets" {}
