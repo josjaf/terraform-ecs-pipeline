@@ -32,6 +32,7 @@ variables:
   #    TF_CLI_ARGS: "-input=false"
   before_script:
     - terraform --version
+    - apk add --no-cache make
     #- echo terraform -chdir=${TF_ROOT} init -backend-config=conf/beta-init.tfvars --reconfigure
 
     #- terraform -chdir=${TF_ROOT} init -backend-config=conf/beta-init.tfvars --reconfigure
