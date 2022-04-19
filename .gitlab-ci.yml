@@ -80,8 +80,9 @@ apply:
   stage: apply
   extends: .base-terraform
   script:
-    - terraform -chdir=${TF_ROOT} apply $PLAN
-    - terraform -chdir=${TF_ROOT} output -json > $TF_OUTPUT
+    - make pipeline-apply-plan
+#    - terraform -chdir=${TF_ROOT} apply $PLAN
+#    - terraform -chdir=${TF_ROOT} output -json > $TF_OUTPUT
   dependencies:
     - plan
   artifacts:
