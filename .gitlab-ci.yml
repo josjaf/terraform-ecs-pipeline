@@ -23,7 +23,7 @@ variables:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:                              # Override DEPLOY_VARIABLE defined
         DEPLOY_VARIABLE: "deploy-production"  # at the job level.
-        ENV: beta
+        ENV: master
 #    - if: $CI_COMMIT_REF_NAME =~ /feature/
 #      variables:
 #        IS_A_FEATURE: "true"
