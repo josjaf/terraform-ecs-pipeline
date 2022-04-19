@@ -21,8 +21,7 @@ pipeline-generate-plan:  ## Generate Terraform plan file
 	terraform -chdir=application plan -var-file "conf/${ENV}.tfvars" -out ${TF_PLAN})
 pipeline-apply-plan:  ## Generate Terraform plan file
 	@echo "Applying plan"
-	(terraform -chdir=application init -backend-config="conf/${ENV}-init.tfvars" --reconfigure; \
-	terraform -chdir=${TF_ROOT} apply ${TF_PLAN}; \
+	(terraform -chdir=${TF_ROOT} apply ${TF_PLAN}; \
 	terraform -chdir=${TF_ROOT} output -json > ${TF_OUTPUT})
 validate:
 	terraform -chdir=application validate
