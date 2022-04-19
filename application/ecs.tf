@@ -71,7 +71,8 @@ resource "aws_ecs_task_definition" "app" {
   tags = merge(
   local.common_tags,
   tomap({
-    "Name" = "${var.namespace}"
+    "Name" = "${var.namespace}",
+    "tf" = "true"
   })
   )
   container_definitions = <<DEFINITION
