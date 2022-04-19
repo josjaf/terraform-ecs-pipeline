@@ -9,6 +9,7 @@ variables:
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
   DEV_NAMESPACE: terraform-ecs
   TF_OUTPUT: ${CI_PROJECT_DIR}/application/output.json
+  TF_INIT: ${CI_PROJECT_DIR}/application/.terraform
   #DOCKER_HOST: tcp://docker:2375/
 
 
@@ -75,6 +76,7 @@ plan:
     name: plan
     paths:
       - $PLAN
+      - $TF_INIT
 
 apply:
   stage: apply

@@ -1,5 +1,5 @@
 TF_OUTPUT=${CI_PROJECT_DIR}/application/output.json
-TF_OUTPUT=application/output.json
+#TF_OUTPUT=application/output.json
 TF_PLAN=plan.tfplan
 TF_ROOT=application
 
