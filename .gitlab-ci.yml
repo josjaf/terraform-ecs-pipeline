@@ -76,7 +76,7 @@ plan:
     name: plan
     paths:
       - $PLAN
-#      - $TF_INIT
+      - $TF_INIT
       - ${CI_PROJECT_DIR}/application/.terraform.lock.hcl
 
 apply:
