@@ -75,9 +75,9 @@ plan:
   artifacts:
     name: plan
     paths:
-      - $PLAN
-      - $TF_INIT
-      - ${CI_PROJECT_DIR}/application/.terraform.lock.hcl
+      - $PLAN # bring the plan as an artifact
+      - $TF_INIT # bring the .terraform folder as an artifact
+      - ${CI_PROJECT_DIR}/application/.terraform.lock.hcl # the lock file where the init and plan comes must be present during the apply
 
 apply:
   stage: apply
