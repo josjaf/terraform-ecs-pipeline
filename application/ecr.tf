@@ -7,52 +7,53 @@ resource "aws_ecr_repository" "ecr" {
   }
 
 }
-//resource "aws_ecr_repository_policy" "ecrrepo" {
-//  repository = aws_ecr_repository.ecr.name
-//  policy = data.aws_iam_policy_document.developer_policy_doc.json
-//}
+resource "aws_ecr_repository_policy" "ecrrepo" {
+  repository = aws_ecr_repository.ecr.name
+  policy = data.aws_iam_policy_document.developer_policy_doc.json
+}
 
-//data "aws_iam_policy_document" "developer_policy_doc" {
-//  statement {
-//    sid = "DevAccounts"
-//    effect = "Allow"
-//    principals {
-//      identifiers = [for account_id in var.ecr_accounts:
-//      "arn:aws:iam::${account_id}:role/josjaffe@amazon.com"
-//      ]
-//      type = "AWS"
-//    }
-//    actions = [
-//      "ecr:GetDownloadUrlForLayer",
-//      "ecr:BatchGetImage",
-//      "ecr:BatchCheckLayerAvailability",
-//      "ecr:PutImage",
-//      "ecr:InitiateLayerUpload",
-//      "ecr:UploadLayerPart",
-//      "ecr:CompleteLayerUpload"
-//    ]
-//  }
-//  statement {
-//    sid = "Self"
-//    effect = "Allow"
-//    principals {
-//      identifiers = [
-//        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-//      ]
-//      type = "AWS"
-//    }
-//    actions = [
-//      "ecr:GetDownloadUrlForLayer",
-//      "ecr:BatchGetImage",
-//      "ecr:BatchCheckLayerAvailability",
-//      "ecr:PutImage",
-//      "ecr:InitiateLayerUpload",
-//      "ecr:UploadLayerPart",
-//      "ecr:CompleteLayerUpload"
-//    ]
-//  }
-//
-//}
+# this is optional for letting cross account ecr
+data "aws_iam_policy_document" "developer_policy_doc" {
+  statement {
+    sid = "DevAccounts"
+    effect = "Allow"
+    principals {
+      identifiers = [for account_id in [data.aws_caller_identity.current.account_id]:
+      "arn:aws:iam::${account_id}:root"
+      ]
+      type = "AWS"
+    }
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload"
+    ]
+  }
+  statement {
+    sid = "Self"
+    effect = "Allow"
+    principals {
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      ]
+      type = "AWS"
+    }
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload"
+    ]
+  }
+
+}
 
 resource "aws_ssm_parameter" "RepoURI" {
   name = "/${var.namespace}/ecr/uri"
