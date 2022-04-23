@@ -9,7 +9,7 @@ variable "app_count" {
 }
 variable "ec2_app_count" {
   description = "Number of docker containers to run with the ec2 capacity provider"
-  default     = 2
+  default     = 0
 }
 variable "fargate_cpu" {
   description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"

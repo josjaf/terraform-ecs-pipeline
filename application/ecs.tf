@@ -108,7 +108,7 @@ resource "aws_ecs_service" "main" {
   name = var.ecs_service_name
   cluster = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
-  desired_count = 0
+  desired_count = var.app_count
   launch_type = "FARGATE"
 
   network_configuration {
