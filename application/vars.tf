@@ -4,10 +4,13 @@ variable "app_port" {
 }
 
 variable "app_count" {
-  description = "Number of docker containers to run"
+  description = "Number of docker containers to run with the fargate provider"
   default     = 2
 }
-
+variable "ec2_app_count" {
+  description = "Number of docker containers to run with the ec2 capacity provider"
+  default     = 2
+}
 variable "fargate_cpu" {
   description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"
   default     = "256"
@@ -23,10 +26,6 @@ variable "ecs_service_name" {
   default     = "2048"
 }
 
-variable "ecs_cluster_name" {
-  description = "cluster name for ecs"
-  default     = "tf-ecs-cluster"
-}
 variable "vpc_tag" {}
 variable "vpc_tags_public_subnets" {}
 variable "vpc_tags_private_subnets" {}

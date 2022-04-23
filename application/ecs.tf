@@ -36,7 +36,7 @@ resource "aws_alb_listener" "front_end" {
 ### ECS
 
 resource "aws_ecs_cluster" "main" {
-  name = var.ecs_cluster_name
+  name = var.namespace
   tags = merge(
   local.common_tags,
   tomap({
@@ -108,7 +108,7 @@ resource "aws_ecs_service" "main" {
   name = var.ecs_service_name
   cluster = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
-  desired_count = var.app_count
+  desired_count = 0
   launch_type = "FARGATE"
 
   network_configuration {
