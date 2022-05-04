@@ -11,9 +11,9 @@ pipeline-apply-plan:  ## Generate Terraform plan file
 	@echo "Applying plan"
 	(terraform -chdir=${TF_ROOT} apply ${TF_PLAN}; \
 	terraform -chdir=${TF_ROOT} output -json > ${TF_OUTPUT})
-pipeline-apply:
+apply:
 	(terraform -chdir=application init -upgrade -backend-config="conf/${ENV}-init.tfvars" --reconfigure; \
-	terraform -chdir=application apply -var-file "conf/${ENV}.tfvars" -auto-approve)
+	terraform -chdir=application apply -var-file "conf/${ENV}.tfvars" -auto-approve; terraform -chdir=application output -json > application/output.json)
 validate:
 	terraform -chdir=application validate
 gitpush:
