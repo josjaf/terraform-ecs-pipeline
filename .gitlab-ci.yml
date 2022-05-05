@@ -23,6 +23,10 @@ variables:
       variables:                              # Override DEPLOY_VARIABLE defined
         DEPLOY_VARIABLE: "deploy-production"  # at the job level.
         ENV: master
+    - if: $CI_COMMIT_REF_NAME == "dev"
+      variables:                              # Override DEPLOY_VARIABLE defined
+        DEPLOY_VARIABLE: "deploy-production"  # at the job level.
+        ENV: master
 #    - if: $CI_COMMIT_REF_NAME =~ /feature/
 #      variables:
 #        IS_A_FEATURE: "true"
@@ -55,6 +59,7 @@ stages:
   - plan
   - apply
   - ecr
+  - kaniko
 
 validate:
   stage: validate
@@ -130,3 +135,17 @@ ecr:
     name: TF_OUTPUT
     paths:
       - $TF_OUTPUT
+kaniko:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - cd application
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
