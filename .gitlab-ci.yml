@@ -136,7 +136,7 @@ ecr:
     paths:
       - $TF_OUTPUT
 kaniko:
-  stage: build
+  stage: kaniko
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
