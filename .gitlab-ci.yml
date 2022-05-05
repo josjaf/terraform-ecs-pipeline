@@ -109,7 +109,9 @@ ecr:
     - cd application
   script:
     - echo getting REPOSITORY_URI from AWS SSM
-    - REPOSITORY_URI=$(aws ssm get-parameter --name "/${DEV_NAMESPACE}/ecr/uri" --query Parameter.Value --output text)
+    - export namespace=$(jq -r .namespace.value $TF_OUTPUT)
+#    - REPOSITORY_URI=$(aws ssm get-parameter --name "/${DEV_NAMESPACE}/ecr/uri" --query Parameter.Value --output text)
+    - export REPOSITORY_URI=$(jq -r .repo_uri.value $TF_OUTPUT)
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
     - docker build -t $REPOSITORY_URI:2048 .
     - docker tag $REPOSITORY_URI:2048 $REPOSITORY_URI:$CI_COMMIT_SHORT_SHA

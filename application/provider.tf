@@ -1,12 +1,12 @@
 provider "aws" {
   region  = var.region
 
-  default_tags {
-    tags = {
-      namespace = var.namespace
-      env       = var.env
-    }
-  }
+#  default_tags {
+#    tags = {
+#      namespace = var.namespace
+#      env       = var.env
+#    }
+#  }
 }
 terraform {
   required_providers {
