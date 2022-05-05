@@ -7,7 +7,6 @@ image:
 variables:
   TF_ROOT: ${CI_PROJECT_DIR}/application
   PLAN: ${CI_PROJECT_DIR}/application/plan.tfplan
-  DEV_NAMESPACE: terraform-ecs
   TF_OUTPUT: ${CI_PROJECT_DIR}/application/output.json
   TF_INIT: ${CI_PROJECT_DIR}/application/.terraform
   #DOCKER_HOST: tcp://docker:2375/
@@ -122,6 +121,7 @@ ecr:
     - export SERVICE=$(jq -r .service.value $TF_OUTPUT)
     - echo SERVICE $SERVICE CLUSTER $CLUSTER
     - aws ecs update-service --cluster $CLUSTER --service $SERVICE
+    - aws ecs wait services-stable --cluster $CLUSTER --service $SERVICE
 
     #- aws ecs update-service --cluster $(terraform output -json | jq -r .cluster.value) --service $(terraform output -json | jq -r .service.value)
   dependencies:
