@@ -24,7 +24,7 @@ destroy:
 	(terraform -chdir=application init -upgrade -backend-config="conf/${ENV}-init.tfvars" --reconfigure; \
 	terraform -chdir=application destroy -var-file "conf/${ENV}.tfvars" -auto-approve)
 beta-app-apply:
-	(export ENV=beta; export AWS_PROFILE=work; make pipeline-apply)
+	(export ENV=beta; export AWS_PROFILE=work; make apply)
 beta-app-destroy:
 	(export ENV=beta; export AWS_PROFILE=work; make destroy)
 deploy-all: cicd-deploy app-deploy gitpush
