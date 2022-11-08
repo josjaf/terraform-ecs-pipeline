@@ -1,27 +1,14 @@
-resource "aws_ssm_parameter" "serviceparameter" {
-  name = "/${var.namespace}/ecs/service"
-  type = "String"
-  value = aws_ecs_service.main.name
-  tags = {
-    Name = var.namespace
-    environment = var.namespace
+resource "aws_ssm_parameter" "ecr" {
+  for_each = {
+    "ecs/service"        = aws_ecs_service.main.name
+    "ecs/cluster"        = aws_ecs_cluster.main.id
+    "ecs/taskdefinition" = aws_ecs_task_definition.app.id
   }
-}
-resource "aws_ssm_parameter" "clusterparameter" {
-  name = "/${var.namespace}/ecs/cluster"
-  type = "String"
-  value = aws_ecs_cluster.main.id
-  tags = {
-    Name = var.namespace
-    environment = var.namespace
-  }
-}
-resource "aws_ssm_parameter" "taskdefinition" {
-  name = "/${var.namespace}/ecs/taskdefinition"
-  type = "String"
-  value = aws_ecs_task_definition.app.id
-  tags = {
-    Name = var.namespace
+  name  = "/${var.namespace}/${each.key}"
+  type  = "String"
+  value = each.value
+  tags  = {
+    Name        = var.namespace
     environment = var.namespace
   }
 }
